@@ -1,15 +1,22 @@
 # HsLua – Bindings to Lua, an embeddable scripting language
 
-[![Build Status]](https://travis-ci.org/hslua/hslua)
+[![Build status][GitHub Actions badge]][GitHub Actions]
 [![AppVeyor Status]](https://ci.appveyor.com/project/tarleb/hslua-r2y18)
 [![Hackage]](https://hackage.haskell.org/package/hslua)
 
 HsLua provides bindings, wrappers, types, and helper functions to bridge
 Haskell and Lua.
 
-[Build Status]: https://travis-ci.org/hslua/hslua.svg?branch=master
-[AppVeyor Status]: https://ci.appveyor.com/api/projects/status/ldutrilgxhpcau94/branch/master?svg=true
+[GitHub Actions badge]: https://img.shields.io/github/workflow/status/hslua/hslua/CI.svg?logo=github
+[GitHub Actions]: https://github.com/hslua/hslua/actions
+[AppVeyor Status]: https://ci.appveyor.com/api/projects/status/ldutrilgxhpcau94/branch/main?svg=true
 [Hackage]: https://img.shields.io/hackage/v/hslua.svg
+
+This package is part of [HsLua], a Haskell framework built around
+the embeddable scripting language [Lua].
+
+[HsLua]: https://hslua.org/
+[Lua]: https://lua.org/
 
 
 Overview
@@ -21,8 +28,8 @@ used everywhere from servers over games and desktop applications up to security
 software and embedded devices. This package provides Haskell bindings to Lua,
 enable coders to embed the language into their programs, making them scriptable.
 
-HsLua ships with batteries included and includes the most recent Lua version
-(i.e., Lua 5.3.5). Cabal flags make it easy to compile against a system-wide Lua
+HsLua ships with batteries included and includes Lua 5.3.6. Cabal
+flags make it easy to compile against a system-wide Lua
 installation.
 
 
@@ -52,7 +59,7 @@ or receiving items from the stack. E.g., calling a function is performed by
 pushing the function onto the stack, followed by the function arguments in the
 order they should be passed to the function. The API function `call` then
 invokes the function with given numbers of arguments, pops the function and
-parameters of the stack, and pushes the results.
+parameters off the stack, and pushes the results.
 
     ,----------.
     |  arg 3   |
@@ -102,48 +109,6 @@ class Pushable a where
 Many basic data types (except for numeric types, see the FAQ) have instances for
 these type classes. New instances can be defined for custom types using the
 functions in `Foreign.Lua.Core` (also exported in `Foreign.Lua`).
-
-
-Build flags
------------
-
-The following cabal build flags are supported:
-
-- `system-lua`: Use the locally installed Lua version instead of the version
-  shipped as part of HsLua.
-
-- `pkg-config`: Use *pkg-config* to discover library and include paths. Setting
-  this flag implies `system-lua`.
-
-- `allow-unsafe-gc`: Allow optimizations which make Lua's garbage collection
-  potentially unsafe; haskell finalizers must be handled with extreme care. This
-  is *enabled* per default, as this is rarely a problem in practice.
-
-- `apicheck`: Compile Lua with its API checks enabled.
-
-- `lua_32bits`: Compile Lua for a 32-bits system (e.g., i386, PowerPC G4).
-
-- `export-dynamic`: Add all symbols to dynamic symbol table; disabling this
-  will make it possible to create fully static binaries, but renders loading
-  of dynamic C libraries impossible.
-
-
-### Example: using a different lua version
-
-To use a system-wide installed Lua when linking hslua as a dependency,
-build/install your package using `--constraint="hslua +system-lua"`. For
-example, you can install Pandoc with hslua that uses system-wide Lua like
-this:
-
-``` sh
-cabal install pandoc --constraint="hslua +system-lua"
-```
-
-or with stack:
-
-``` sh
-stack install pandoc --flag=hslua:system-lua
-```
 
 
 Q&A
